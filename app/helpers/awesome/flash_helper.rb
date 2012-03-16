@@ -3,7 +3,7 @@ module Awesome::FlashHelper
 	def set_flash(type, *params)
 		options = {:locals => {}, :now => false}
 		options = options.update(params.extract_options!.symbolize_keys)
-		options[:scope] ||= "flash.controller.#{controller_name}.#{action_name}.#{type}"
+		options[:scope] ||= "awesome.flash.controller.#{controller_name}.#{action_name}.#{type}"
 		message = t(options[:scope], options[:locals])
 		message.each_key { |key| message[key] = t("#{options[:scope]}.#{key}", options[:locals]) } if message.is_a?(Hash)
 		if options[:now]
