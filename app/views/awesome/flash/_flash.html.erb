@@ -1,5 +1,7 @@
 <div class="alert alert-<%= type %>">
-  <h4 class="alert-heading"><%= header %></strong></h4>
+  <% unless header.blank? %>
+  <h5 class="alert-heading"><%= header %></strong></h5>
+  <% end %>
   <% unless body.blank? %>
     <%= body %>
   <% end %>
