@@ -7,7 +7,10 @@ module AwesomeFlash
       options = options.update(params.extract_options!.symbolize_keys)
       options[:scope] ||= "awesome.flash.controller.#{controller_name}.#{action_name}.#{type}"
       message = t(options[:scope], options[:locals])
-      message.each_key { |key| message[key] = t("#{options[:scope]}.#{key}", options[:locals]) } if message.is_a?(Hash)
+      if message.is_a?(Hash)
+        message.each_key { |key| message[key] = t("#{options[:scope]}.#{key}", options[:locals]) }
+        message = message.stringify_keys
+      end
       if options[:now]
         flash.now[type] = message
       else
@@ -20,12 +23,12 @@ module AwesomeFlash
     def flash_messages
       flash_messages = flash.collect do |type, message|
         if message.is_a?(Hash)
-          header = message[:header]
-          body = message[:body]
+          header = message['header']
+          body = message['body']
         else
           header = message
         end
-        render partial: 'awesome/flash/flash', locals: { type: type.to_s, header: header, body: body }
+        render partial: 'awesome/flash/flash', locals: { type: type, header: header, body: body }
       end
       flash.discard
       flash_messages.join.html_safe
